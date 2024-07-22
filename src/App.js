@@ -19,10 +19,13 @@ function App() {
     }
   }, [inputTexts]);
 
+
   const handleInputComplete = (text) => {
     setInputTexts(prevTexts => [...prevTexts, { text, isUser: true }]);
   };
 
+    //AI give suggestions
+    
   const handleErrorClick = async (error, errorType, context) => {
     try {
       const response = await axios.post('https://api.openai.com/v1/chat/completions', {

@@ -73,6 +73,12 @@ function VoiceInput({ onInputComplete }) {
     setInputText('');
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
   return (
     <Box display="flex" alignItems="center" mb={2}>
       <TextField
@@ -80,6 +86,7 @@ function VoiceInput({ onInputComplete }) {
         variant="outlined"
         value={inputText}
         onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
         placeholder="Speak or input uncertain sentence here. e.g. I feel hapy for your grad"
       />
       <Button

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, IconButton } from '@mui/material';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import axios from 'axios';
 
 function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
@@ -78,6 +79,13 @@ function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
     onErrorClick(error, errorType, inputText);
   };
 
+  const handleCopyText = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('Text copied to clipboard');
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
+  };
 
   const renderHighlightedText = () => {
     if (!highlightedText) return null;
@@ -95,7 +103,17 @@ function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
     console.log('All errors:', allErrors);  // 添加这行
 
     if (allErrors.length === 0) {
-       return <Typography sx={{ fontSize: '1.4rem' }}>{text}</Typography>;
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography sx={{ fontSize: '1.4rem', flexGrow: 1 }}>{text}</Typography>
+          <IconButton onClick={() => onTextToSpeech(text)} size="small" sx={{ ml: 1 }}>
+            <CampaignIcon />
+          </IconButton>
+          <IconButton onClick={() => handleCopyText(text)} size="small" sx={{ ml: 1 }}>
+            <ContentCopyIcon />
+          </IconButton>
+        </Box>
+      );
     }
     
     // 按错误在文本中的位置排序，从后往前替换
@@ -144,18 +162,23 @@ function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
           <IconButton onClick={() => onTextToSpeech(text)} size="small" sx={{ ml: 1 }}>
             <CampaignIcon />
           </IconButton>
+          <IconButton onClick={() => handleCopyText(text)} size="small" sx={{ ml: 1 }}>
+          <ContentCopyIcon />
+        </IconButton>
         </Box>
       );
     };
 
   return (
     <Box sx={{ 
-        height: '100%', 
+        height: '150px', 
         p: 1, 
         backgroundColor: isUser ? '#f0f0f0' : '#e3f2fd', // 用户消息是灰色，AI消息是浅蓝色
         overflow: 'auto',
         borderRadius: '8px',
-        mb: 2, // 添加底部边距以分隔消息
+        mb: 2, 
+        display: 'flex',
+        flexDirection: 'column',
         ...sx // 包含传入的 sx 属性
       }}>
       {loading ? (
