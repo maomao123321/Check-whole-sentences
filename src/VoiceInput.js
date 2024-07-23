@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Button, TextField, Box } from '@mui/material';
-import { Mic, MicOff } from '@mui/icons-material';
+import { TextField, Box, IconButton } from '@mui/material';
+import { Mic, MicOff, Send } from '@mui/icons-material';
 import axios from 'axios';
 
 function VoiceInput({ onInputComplete }) {
@@ -69,42 +69,63 @@ function VoiceInput({ onInputComplete }) {
   };
 
   const handleSubmit = () => {
-    onInputComplete(inputText);
-    setInputText('');
+    if (inputText.trim()) {
+      onInputComplete(inputText);
+      setInputText('');
+    }
   };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
       handleSubmit();
     }
   };
 
   return (
-    <Box display="flex" alignItems="center" mb={2}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 2,
+        backgroundColor: 'background.paper',
+      }}
+    >
       <TextField
-        fullWidth
         variant="outlined"
         value={inputText}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
         placeholder="Speak or input uncertain sentence here. e.g. I feel hapy for your grad"
+        sx={{ 
+          width: '60%',
+          mr: 2,
+          '& .MuiInputBase-root': {
+            height: '4rem',
+          },
+          '& .MuiInputBase-input': {
+            fontSize: '1.4rem',
+            height: '4rem',
+            padding: '0 1rem',
+            display: 'flex',
+            alignItems: 'center',
+          }
+        }}
       />
-      <Button
+      <IconButton 
         onClick={toggleRecording}
-        color={isRecording ? 'secondary' : 'primary'}
-        variant="contained"
-        sx={{ marginLeft: '10px' }}
+        color={isRecording ? "secondary" : "primary"}
+        sx={{ mr: 1 }}
       >
-        {isRecording ? <MicOff /> : <Mic />}
-      </Button>
-      <Button
+        {isRecording ? <MicOff sx={{ fontSize: 40 }} /> : <Mic sx={{ fontSize: 40 }} />}
+      </IconButton>
+      <IconButton 
         onClick={handleSubmit}
         color="primary"
-        variant="contained"
-        sx={{ marginLeft: '10px' }}
       >
-        Submit
-      </Button>
+        <Send sx={{ fontSize: 40 }} />
+      </IconButton>
     </Box>
   );
 }

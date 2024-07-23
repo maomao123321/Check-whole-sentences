@@ -1,16 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Paper, Grid, Typography, Tooltip } from '@mui/material';
+import { Box, Paper, Grid, Typography, IconButton } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 import VoiceInput from './VoiceInput';
 import CorrectArea from './CorrectArea';
 import WordSuggestions from './WordSuggestions';
 import axios from 'axios';
-import CampaignIcon from '@mui/icons-material/Campaign';
+
 
 function App() {
   const [inputTexts, setInputTexts] = useState([]);
   const [suggestions, setSuggestions] = useState(null);
   const [currentError, setCurrentError] = useState(null);
   const chatAreaRef = useRef(null);
+  const [correctedErrors, setCorrectedErrors] = useState({});
 
 
   useEffect(() => {
@@ -36,7 +38,7 @@ function App() {
             content: `You are a word suggestion system. Based on the error type and context, suggest three appropriate alternatives. 
             For spelling errors, suggest correct spellings. 
             For incomplete words, suggest complete words. 
-            For context errors, suggest contextually appropriate alternatives.
+            For context errors, suggest contextually appropriate alternative words, not sentences.
             Provide exactly three suggestions, one per line, without any numbering or additional text.`
           },
           {
@@ -79,11 +81,23 @@ function App() {
       const { error, context } = currentError;
       const correctedText = context.replace(error, suggestion);
       
-      setInputTexts(prevTexts => [...prevTexts, { text: correctedText, isUser: false }]);
+      setInputTexts(prevTexts => {
+        const newTexts = [...prevTexts];
+        // 添加新的纠正消息到列表末尾
+        newTexts.push({ text: correctedText, isUser: false, isCorrection: true });
+        return newTexts;
+      });
+  
+      setCorrectedErrors(prev => ({
+        ...prev,
+        [error]: suggestion
+      }));
+  
       setSuggestions(null);
       setCurrentError(null);
     }
   };
+  
 
   useEffect(() => {
     if (chatAreaRef.current) {
@@ -118,6 +132,11 @@ function App() {
     }
   };
 
+  const handleReset = () => {
+    setInputTexts([]);
+    setSuggestions(null);
+    setCurrentError(null);
+  };
 
   return (
     <Box sx={{
@@ -129,103 +148,88 @@ function App() {
       <Box sx={{
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-between',
         bgcolor: 'primary.main',
         color: 'primary.contrastText',
         position: 'sticky',
         top: 0,
         zIndex: 1000,
         py: 2,
+        px: 3,
       }}>
-        <Box sx={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '30%',
-          ml: 2
-        }}>
-          <Tooltip title="Spelling error" placement="bottom">
-            <Typography sx={{
-              fontSize: '0.9rem',
-              bgcolor: 'yellow',
-              color: 'black',
-              px: 1.5,
-              py: 0.5,
-              mr: 1,
-              borderRadius: '20px',
-              fontWeight: 'bold'
-            }}>
-              Spelling
-            </Typography>
-          </Tooltip>
-          <Tooltip title="Incomplete word" placement="bottom">
-            <Typography sx={{
-              fontSize: '0.9rem',
-              bgcolor: 'orange',
-              color: 'black',
-              px: 1.5,
-              py: 0.5,
-              mr: 1,
-              borderRadius: '20px',
-              fontWeight: 'bold'
-            }}>
-              Incomplete
-            </Typography>
-          </Tooltip>
-          <Tooltip title="Context error" placement="bottom">
-            <Typography sx={{
-              fontSize: '0.9rem',
-              bgcolor: 'pink',
-              color: 'black',
-              px: 1.5,
-              py: 0.5,
-              borderRadius: '20px',
-              fontWeight: 'bold'
-            }}>
-              Context
-            </Typography>
-          </Tooltip>
-        </Box>
+        <Box sx={{ width: '30%' }} /> {/* 左侧空白占位 */}
         <Typography variant="h2" component="h1" sx={{
           textAlign: 'center',
-          flexGrow: 1,
           fontSize: '2.5rem',
           width: '40%',
         }}>
-          Co-create sentences
+          Check your Sentences
         </Typography>
-        <Box sx={{ width: '30%' }} />
-      </Box>
-
-
-<Grid container sx={{ flexGrow: 1, p: 3, mt: 2, mb: 10, pr: 10 , 
-  height: 'calc(100vh - 250px)',  }}>
-      <Grid item xs={8} sx={{ pr: 10, height: '90%', overflow: 'auto'  }}>
-        <Paper
-          ref={chatAreaRef}
-          elevation={3}
+        <Box sx={{ 
+          width: '30%', 
+          display: 'flex', 
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }}>
+        <IconButton
+          onClick={handleReset}
           sx={{
-            width: '100%',
-            height: '100%',
-            overflow: 'auto',
+            color: 'primary.contrastText',
             display: 'flex',
             flexDirection: 'column',
-            p: 2,
-            '& > *:not(:last-child)': { mb: 2 },
-            fontSize: '1.4rem'
+            alignItems: 'center',
           }}
         >
-          {inputTexts.map((item, index) => (
-            <CorrectArea 
-            key={index} 
-            inputText={item.text} 
-            isUser={item.isUser}
-            onErrorClick={handleErrorClick}
-            onTextToSpeech={handleTextToSpeech}
-            sx={{ fontSize: '1.4rem' }}
-          />
+          <HomeIcon sx={{ fontSize: 40 }} />
+          <Typography variant="caption" sx={{ mt: 0.5 }}>
+            Clear
+          </Typography>
+        </IconButton>
+      </Box>
+    </Box>
 
+
+<Box sx={{ p:2, backgroundColor: 'background.paper'}}>
+  <VoiceInput onInputComplete={handleInputComplete} />
+</Box>
+
+<Grid container sx={{ flexGrow: 1, p: 3, mt: 2, pr: 10, height: 'calc(100vh - 300px)' }}>
+  <Grid item xs={8} sx={{ pr: 10, height: '100%', overflow: 'auto' }}>
+    <Paper
+      ref={chatAreaRef}
+      elevation={3}
+      sx={{
+        width: '100%',
+        height: '100%',
+        overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        p: 2,
+        '& > *:not(:last-child)': { mb: 2 },
+      }}
+    >
+{inputTexts.map((item, index) => (
+  <CorrectArea
+  key={index} 
+  inputText={item.text} 
+  isUser={item.isUser}
+  isCorrection={item.isCorrection}  
+  onErrorClick={handleErrorClick}
+  onTextToSpeech={handleTextToSpeech}
+  correctedErrors={correctedErrors}
+    sx={{ 
+      height: 'auto',
+      minHeight: '80px',
+      fontSize: '1.4rem',
+      flexShrink: 0,
+      mb: 2,
+    }}
+  />
 ))}
-        </Paper>
-      </Grid>
+    </Paper>
+  </Grid>
+
+
       <Grid item xs={4} sx={{ pl: 2 , pr: 1}}>
         <Paper
           elevation={3}
@@ -243,23 +247,14 @@ function App() {
             suggestions={suggestions}
             onSuggestionConfirm={handleSuggestionConfirm}
             onTextToSpeech={handleTextToSpeech}
+            onRegenerateSuggestions={() => handleErrorClick(currentError.error, currentError.errorType, currentError.context)}
             sx={{ fontSize: '1.4rem' }} 
           />
         </Paper>
       </Grid>
     </Grid>
 
-    <Box sx={{ 
-      p: 2, 
-      position: 'fixed', 
-      bottom: 0, 
-      left: 0, 
-      right: 0,
-      backgroundColor: 'background.paper',
-      zIndex: 1000
-    }}>
-      <VoiceInput onInputComplete={handleInputComplete} />
-    </Box>
+    
   </Box>
 );
 }

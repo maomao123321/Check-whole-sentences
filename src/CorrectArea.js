@@ -33,7 +33,7 @@ function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
             {
               "spelling": [{"error": "misspelled word", "target": "correct spelling"}],
               "incomplete": [{"error": "incomplete word", "target": "complete word"}],
-              "context": [{"error": "contextually incorrect word or phrase", "target": "suggested correct word or phrase"}]
+              "context": [{"error": "contextually incorrect word or phrase", "target": "suggested correct word"}]
             }
             
             If there are no errors of a particular type, return an empty array for that type.`
@@ -126,10 +126,10 @@ function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
         color = 'yellow';
         errorType = 'spelling';
       } else if (errors.incomplete && errors.incomplete.some(e => e.error === error)) {
-        color = 'orange';
+        color = 'yellow';
         errorType = 'incomplete';
       } else {
-        color = 'pink';
+        color = 'yellow';
         errorType = 'context';
       }
 
@@ -171,15 +171,13 @@ function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
 
   return (
     <Box sx={{ 
-        height: '150px', 
-        p: 1, 
-        backgroundColor: isUser ? '#f0f0f0' : '#e3f2fd', // 用户消息是灰色，AI消息是浅蓝色
-        overflow: 'auto',
-        borderRadius: '8px',
-        mb: 2, 
-        display: 'flex',
-        flexDirection: 'column',
-        ...sx // 包含传入的 sx 属性
+      p: 1, 
+      backgroundColor: isUser ? '#f0f0f0' : '#e3f2fd',
+      overflow: 'auto',
+      borderRadius: '8px',
+      display: 'flex',
+      flexDirection: 'column',
+      ...sx  // 包含传入的 sx 属性
       }}>
       {loading ? (
         <CircularProgress />
