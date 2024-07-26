@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, IconButton } from '@mui/material';
-import CampaignIcon from '@mui/icons-material/Campaign';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import axios from 'axios';
 
@@ -107,7 +107,7 @@ function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={{ fontSize: '1.4rem', flexGrow: 1 }}>{text}</Typography>
           <IconButton onClick={() => onTextToSpeech(text)} size="small" sx={{ ml: 1 }}>
-            <CampaignIcon />
+            <VolumeUpIcon />
           </IconButton>
           <IconButton onClick={() => handleCopyText(text)} size="small" sx={{ ml: 1 }}>
             <ContentCopyIcon />
@@ -160,7 +160,7 @@ function CorrectArea({ inputText, isUser, onErrorClick, onTextToSpeech, sx  }) {
             }}
           />
           <IconButton onClick={() => onTextToSpeech(text)} size="small" sx={{ ml: 1 }}>
-            <CampaignIcon />
+            <VolumeUpIcon />
           </IconButton>
           <IconButton onClick={() => handleCopyText(text)} size="small" sx={{ ml: 1 }}>
           <ContentCopyIcon />

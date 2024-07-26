@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Paper, Grid, Typography, IconButton } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import VoiceInput from './VoiceInput';
 import CorrectArea from './CorrectArea';
 import WordSuggestions from './WordSuggestions';
@@ -180,8 +180,8 @@ function App() {
             alignItems: 'center',
           }}
         >
-          <HomeIcon sx={{ fontSize: 40 }} />
-          <Typography variant="caption" sx={{ mt: 0.5 }}>
+          <RefreshIcon sx={{ fontSize: 60 }} />
+          <Typography variant="caption" sx={{ mt: 1, fontSize: 20}}>
             Clear
           </Typography>
         </IconButton>

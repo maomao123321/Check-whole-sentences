@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import CampaignIcon from '@mui/icons-material/Campaign';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 function WordSuggestions({ suggestions, onSuggestionConfirm, onTextToSpeech, onRegenerateSuggestions, sx }) {
   const [selectedSuggestion, setSelectedSuggestion] = useState(null);
@@ -51,7 +51,7 @@ function WordSuggestions({ suggestions, onSuggestionConfirm, onTextToSpeech, onR
                   e.stopPropagation();
                   onTextToSpeech(suggestion.trim());
                 }} size="small">
-                  <CampaignIcon />
+                  <VolumeUpIcon />
                 </IconButton>
               </ListItem>
             ))}

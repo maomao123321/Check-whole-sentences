@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { TextField, Box, IconButton } from '@mui/material';
-import { Mic, MicOff, Send } from '@mui/icons-material';
+import { Mic, Stop, Send } from '@mui/icons-material';
 import axios from 'axios';
 
 function VoiceInput({ onInputComplete }) {
@@ -115,10 +115,10 @@ function VoiceInput({ onInputComplete }) {
       />
       <IconButton 
         onClick={toggleRecording}
-        color={isRecording ? "secondary" : "primary"}
+        color={isRecording ? "error" : "primary"}
         sx={{ mr: 1 }}
       >
-        {isRecording ? <MicOff sx={{ fontSize: 40 }} /> : <Mic sx={{ fontSize: 40 }} />}
+        {isRecording ? <Stop sx={{ fontSize: 40 }} /> : <Mic sx={{ fontSize: 40 }} />}
       </IconButton>
       <IconButton 
         onClick={handleSubmit}
