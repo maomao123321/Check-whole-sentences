@@ -122,7 +122,7 @@ function VoiceInput({ onInputComplete }) {
       </IconButton>
       <IconButton 
         onClick={handleSubmit}
-        color="primary"
+        sx={{ color: '#4CAF50' }}
       >
         <Send sx={{ fontSize: 40 }} />
       </IconButton>
