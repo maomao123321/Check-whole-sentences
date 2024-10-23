@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
+//import CancelIcon from '@mui/icons-material/Cancel';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 
 function WordSuggestions({ suggestions, onSuggestionConfirm, onTextToSpeech, onRegenerateSuggestions, sx }) {
   const [selectedSuggestion, setSelectedSuggestion] = useState(null);
@@ -81,13 +83,13 @@ function WordSuggestions({ suggestions, onSuggestionConfirm, onTextToSpeech, onR
                 ml: 2,
               }}
             >
-              <CancelIcon
+              <AddCircleIcon
                 sx={{
                   fontSize: '2.5rem',
                   color: 'red',
                 }}
               />
-              No
+              More
             </IconButton>
           </Box>
         </>
